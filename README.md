@@ -1,1 +1,1 @@
-# kaderncitvi.mlada-boleslav.cz
+# kadernictvi.mladaboleslav.cz
