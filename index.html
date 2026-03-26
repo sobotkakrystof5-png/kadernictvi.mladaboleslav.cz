@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kadeřnictví u Stadionu – Mladá Boleslav</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0f;
+    --navy: #0d1b2a;
+    --navy-mid: #112236;
+    --navy-light: #1a3252;
+    --accent: #4a7fa5;
+    --accent-light: #6fa3c8;
+    --white: #f5f5f0;
+    --white-dim: rgba(245,245,240,0.7);
+    --white-faint: rgba(245,245,240,0.1);
+    --gold: #c9a96e;
+    --gold-dim: rgba(201,169,110,0.2);
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'DM Sans', sans-serif;
+    --radius: 4px;
+    --radius-lg: 12px;
+    --transition: 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 1.2rem 4rem;
+    display: flex; align-items: center; justify-content: space-between;
+    background: linear-gradient(to bottom, rgba(10,10,15,0.95) 0%, transparent 100%);
+    backdrop-filter: blur(2px);
+    transition: background var(--transition);
+  }
+  nav.scrolled {
+    background: rgba(10,10,15,0.97);
+    border-bottom: 1px solid rgba(74,127,165,0.2);
+  }
+  .nav-logo {
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    color: var(--white-dim);
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: color var(--transition);
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-cta {
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold) !important;
+    padding: 0.55rem 1.4rem;
+    border-radius: var(--radius);
+    transition: all var(--transition) !important;
+  }
+  .nav-cta:hover {
+    background: var(--gold) !important;
+    color: var(--black) !important;
+  }
+  .hamburger {
+    display: none;
+    flex-direction: column; gap: 5px; cursor: pointer; padding: 4px;
+  }
+  .hamburger span {
+    width: 24px; height: 1.5px;
+    background: var(--white);
+    transition: var(--transition);
+    display: block;
+  }
+
+  /* ─── HERO ─── */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background: var(--navy);
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(74,127,165,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(201,169,110,0.06) 0%, transparent 50%),
+      linear-gradient(135deg, var(--black) 0%, var(--navy) 50%, #0a1520 100%);
+  }
+  /* decorative lines */
+  .hero-bg::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 60px,
+        rgba(74,127,165,0.04) 60px,
+        rgba(74,127,165,0.04) 61px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 60px,
+        rgba(74,127,165,0.04) 60px,
+        rgba(74,127,165,0.04) 61px
+      );
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    text-align: center;
+    padding: 2rem;
+    max-width: 800px;
+  }
+  .hero-eyebrow {
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    opacity: 0; animation: fadeUp 1s 0.3s forwards;
+  }
+  .hero-title {
+    font-family: var(--serif);
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+    opacity: 0; animation: fadeUp 1s 0.5s forwards;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold);
+    font-weight: 400;
+  }
+  .hero-subtitle {
+    font-family: var(--sans);
+    font-size: clamp(0.9rem, 2vw, 1.05rem);
+    font-weight: 300;
+    color: var(--white-dim);
+    max-width: 480px;
+    margin: 1.5rem auto 3rem;
+    opacity: 0; animation: fadeUp 1s 0.7s forwards;
+  }
+  .hero-actions {
+    display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+    opacity: 0; animation: fadeUp 1s 0.9s forwards;
+  }
+  .btn-primary {
+    background: var(--gold);
+    color: var(--black);
+    border: none;
+    padding: 0.9rem 2.5rem;
+    border-radius: var(--radius);
+    font-family: var(--sans);
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all var(--transition);
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-primary:hover {
+    background: var(--white);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(201,169,110,0.25);
+  }
+  .btn-outline {
+    background: transparent;
+    color: var(--white);
+    border: 1px solid rgba(245,245,240,0.3);
+    padding: 0.9rem 2.5rem;
+    border-radius: var(--radius);
+    font-family: var(--sans);
+    font-size: 0.8rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all var(--transition);
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-outline:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    transform: translateY(-2px);
+  }
+  .hero-scroll {
+    position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    opacity: 0; animation: fadeIn 1s 1.5s forwards;
+  }
+  .hero-scroll span {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--white-dim);
+  }
+  .scroll-line {
+    width: 1px; height: 50px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollAnim 2s ease-in-out infinite;
+  }
+
+  /* ─── SECTION COMMON ─── */
+  section { padding: 7rem 4rem; }
+  .section-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    display: block;
+  }
+  .section-title {
+    font-family: var(--serif);
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--white);
+    max-width: 600px;
+  }
+  .section-title em { font-style: italic; color: var(--gold); }
+  .section-divider {
+    width: 40px; height: 1px;
+    background: var(--gold);
+    margin: 2rem 0;
+  }
+  .container { max-width: 1160px; margin: 0 auto; }
+
+  /* ─── ABOUT ─── */
+  #about {
+    background: var(--black);
+    position: relative;
+  }
+  #about::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(74,127,165,0.3), transparent);
+  }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+    max-width: 1160px;
+    margin: 0 auto;
+  }
+  .about-visual {
+    position: relative;
+  }
+  .about-frame {
+    width: 100%; aspect-ratio: 3/4;
+    background: linear-gradient(135deg, var(--navy-mid), var(--navy-light));
+    border-radius: var(--radius-lg);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .about-frame::before {
+    content: '✂';
+    font-size: 6rem;
+    opacity: 0.07;
+    position: absolute;
+  }
+  .about-frame-inner {
+    text-align: center; padding: 3rem;
+  }
+  .about-initials {
+    font-family: var(--serif);
+    font-size: 5rem;
+    font-weight: 600;
+    color: var(--gold);
+    line-height: 1;
+    display: block;
+    opacity: 0.8;
+  }
+  .about-years {
+    margin-top: 1.5rem;
+    display: flex; gap: 2rem; justify-content: center;
+  }
+  .about-stat { text-align: center; }
+  .about-stat-num {
+    font-family: var(--serif);
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1;
+    display: block;
+  }
+  .about-stat-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--white-dim);
+  }
+  .about-badge {
+    position: absolute;
+    bottom: -1rem; right: -1rem;
+    width: 100px; height: 100px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    color: var(--black);
+  }
+  .about-badge-num {
+    font-family: var(--serif);
+    font-size: 1.8rem;
+    font-weight: 600;
+    line-height: 1;
+  }
+  .about-badge-text {
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 1.2;
+  }
+  .about-text p {
+    color: var(--white-dim);
+    font-size: 1rem;
+    line-height: 1.85;
+    margin-bottom: 1.5rem;
+  }
+  .about-signature {
+    font-family: var(--serif);
+    font-size: 1.8rem;
+    font-style: italic;
+    color: var(--gold);
+    margin-top: 2rem;
+  }
+
+  /* ─── SERVICES ─── */
+  #services {
+    background: var(--navy);
+    position: relative;
+  }
+  #services::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(201,169,110,0.3), transparent);
+  }
+  .services-header { max-width: 1160px; margin: 0 auto 4rem; }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.5rem;
+    max-width: 1160px;
+    margin: 0 auto;
+  }
+  .service-card {
+    background: rgba(245,245,240,0.04);
+    border: 1px solid rgba(245,245,240,0.08);
+    border-radius: var(--radius-lg);
+    padding: 2.2rem 1.8rem;
+    transition: all var(--transition);
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--accent), var(--gold));
+    transform: scaleX(0);
+    transition: transform var(--transition);
+  }
+  .service-card:hover {
+    background: rgba(245,245,240,0.07);
+    border-color: rgba(201,169,110,0.25);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-icon {
+    width: 48px; height: 48px;
+    background: var(--gold-dim);
+    border: 1px solid rgba(201,169,110,0.3);
+    border-radius: var(--radius);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+  }
+  .service-name {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+  }
+  .service-desc {
+    font-size: 0.82rem;
+    color: var(--white-dim);
+    line-height: 1.6;
+  }
+
+  /* ─── PRICING ─── */
+  #pricing {
+    background: var(--black);
+    position: relative;
+  }
+  #pricing::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(74,127,165,0.3), transparent);
+  }
+  .pricing-header { max-width: 1160px; margin: 0 auto 4rem; }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    max-width: 1160px;
+    margin: 0 auto;
+  }
+  .pricing-card {
+    background: var(--navy-mid);
+    border: 1px solid rgba(74,127,165,0.15);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: all var(--transition);
+  }
+  .pricing-card:hover {
+    border-color: rgba(201,169,110,0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+  }
+  .pricing-card-header {
+    background: linear-gradient(135deg, var(--navy-light), var(--navy-mid));
+    padding: 1.5rem 2rem;
+    display: flex; align-items: center; gap: 1rem;
+    border-bottom: 1px solid rgba(245,245,240,0.06);
+  }
+  .pricing-card-icon { font-size: 1.5rem; }
+  .pricing-card-title {
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--white);
+  }
+  .pricing-items { padding: 1.5rem 2rem; }
+  .pricing-item {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid rgba(245,245,240,0.05);
+  }
+  .pricing-item:last-child { border-bottom: none; }
+  .pricing-item-name {
+    font-size: 0.88rem;
+    color: var(--white-dim);
+  }
+  .pricing-item-price {
+    font-family: var(--serif);
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--gold);
+    white-space: nowrap;
+    margin-left: 1rem;
+  }
+
+  /* ─── LOCATION ─── */
+  #location {
+    background: var(--navy);
+    position: relative;
+  }
+  #location::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(201,169,110,0.3), transparent);
+  }
+  .location-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 5rem;
+    align-items: start;
+    max-width: 1160px;
+    margin: 0 auto;
+  }
+  .location-info p {
+    color: var(--white-dim);
+    font-size: 0.95rem;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+  }
+  .location-details { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2.5rem; }
+  .location-detail {
+    display: flex; align-items: flex-start; gap: 1rem;
+    padding: 1.2rem 1.5rem;
+    background: rgba(245,245,240,0.04);
+    border: 1px solid rgba(245,245,240,0.07);
+    border-radius: var(--radius);
+  }
+  .location-detail-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
+  .location-detail-text { font-size: 0.9rem; color: var(--white-dim); line-height: 1.5; }
+  .location-detail-label {
+    display: block;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.2rem;
+  }
+  .map-container {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid rgba(74,127,165,0.2);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+  }
+  .map-container iframe {
+    width: 100%; height: 420px;
+    border: none;
+    display: block;
+    filter: grayscale(20%) contrast(1.05);
+  }
+
+  /* ─── CONTACT ─── */
+  #contact {
+    background: var(--black);
+    text-align: center;
+    position: relative;
+  }
+  #contact::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(74,127,165,0.3), transparent);
+  }
+  .contact-inner { max-width: 700px; margin: 0 auto; }
+  .contact-inner .section-title { max-width: 100%; margin: 0 auto; }
+  .contact-inner .section-divider { margin: 2rem auto; }
+  .contact-inner p {
+    color: var(--white-dim);
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 3rem;
+  }
+  .contact-info {
+    display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;
+    margin-bottom: 3rem;
+  }
+  .contact-item {
+    display: flex; align-items: center; gap: 0.8rem;
+    padding: 1rem 1.5rem;
+    background: rgba(245,245,240,0.04);
+    border: 1px solid rgba(245,245,240,0.08);
+    border-radius: var(--radius);
+    font-size: 0.88rem;
+    color: var(--white-dim);
+    text-decoration: none;
+    transition: all var(--transition);
+  }
+  .contact-item:hover {
+    border-color: rgba(201,169,110,0.4);
+    color: var(--white);
+    transform: translateY(-2px);
+  }
+  .contact-item-icon { font-size: 1.1rem; }
+
+  /* ─── MODAL ─── */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 2rem;
+    opacity: 0; visibility: hidden;
+    transition: all 0.3s ease;
+  }
+  .modal-overlay.active { opacity: 1; visibility: visible; }
+  .modal {
+    background: var(--navy-mid);
+    border: 1px solid rgba(74,127,165,0.25);
+    border-radius: var(--radius-lg);
+    padding: 3rem;
+    max-width: 500px;
+    width: 100%;
+    position: relative;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+  }
+  .modal-overlay.active .modal { transform: translateY(0); }
+  .modal-close {
+    position: absolute; top: 1.2rem; right: 1.5rem;
+    background: none; border: none;
+    color: var(--white-dim); font-size: 1.5rem;
+    cursor: pointer; transition: color var(--transition);
+    line-height: 1;
+  }
+  .modal-close:hover { color: var(--gold); }
+  .modal-title {
+    font-family: var(--serif);
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+  }
+  .modal-subtitle {
+    font-size: 0.82rem;
+    color: var(--white-dim);
+    letter-spacing: 0.05em;
+    margin-bottom: 2rem;
+  }
+  .form-group { margin-bottom: 1.2rem; }
+  .form-group label {
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    background: rgba(245,245,240,0.05);
+    border: 1px solid rgba(245,245,240,0.12);
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+    color: var(--white);
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color var(--transition);
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--accent);
+  }
+  .form-group select option { background: var(--navy-mid); }
+  .form-group textarea { resize: vertical; min-height: 80px; }
+  .modal-submit {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--navy);
+    border-top: 1px solid rgba(74,127,165,0.15);
+    padding: 3rem 4rem;
+  }
+  .footer-inner {
+    max-width: 1160px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+  .footer-logo {
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--white);
+  }
+  .footer-logo span { color: var(--gold); }
+  .footer-copy {
+    font-size: 0.75rem;
+    color: var(--white-dim);
+    letter-spacing: 0.05em;
+  }
+  .footer-links {
+    display: flex; gap: 2rem; list-style: none;
+  }
+  .footer-links a {
+    font-size: 0.75rem;
+    color: var(--white-dim);
+    text-decoration: none;
+    transition: color var(--transition);
+  }
+  .footer-links a:hover { color: var(--gold); }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes scrollAnim {
+    0%, 100% { transform: scaleY(1); transform-origin: top; }
+    50% { transform: scaleY(0.5); transform-origin: top; }
+  }
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+  .reveal-delay-5 { transition-delay: 0.5s; }
+  .reveal-delay-6 { transition-delay: 0.6s; }
+
+  /* ─── MOBILE MENU ─── */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: var(--navy);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      transform: translateX(100%);
+      transition: transform var(--transition);
+      z-index: 99;
+    }
+    .nav-links.open { transform: translateX(0); }
+    .nav-links a { font-size: 1rem; letter-spacing: 0.2em; }
+    .hamburger { display: flex; z-index: 101; }
+    section { padding: 5rem 1.5rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .about-visual { max-width: 340px; margin: 0 auto; }
+    .location-grid { grid-template-columns: 1fr; gap: 3rem; }
+    footer { padding: 2rem 1.5rem; }
+    .footer-inner { flex-direction: column; text-align: center; }
+    .hero-title { font-size: 3rem; }
+  }
+
+  @media (max-width: 480px) {
+    .services-grid { grid-template-columns: 1fr; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .contact-info { flex-direction: column; align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">Kadeřnictví <span>u Stadionu</span></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">O mně</a></li>
+    <li><a href="#services">Služby</a></li>
+    <li><a href="#pricing">Ceník</a></li>
+    <li><a href="#location">Kde nás najdete</a></li>
+    <li><a href="#contact" class="nav-cta">Objednat se</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span id="h1"></span><span id="h2"></span><span id="h3"></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Mladá Boleslav · Profesionální kadeřnictví</p>
+    <h1 class="hero-title">Kadeřnictví<br><em>u Stadionu</em></h1>
+    <p class="hero-subtitle">Moderní péče o vaše vlasy v Mladé Boleslavi. Individuální přístup, profesionální výsledky.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="openModal()">Objednat se</button>
+      <a href="#services" class="btn-outline">Naše služby</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-visual reveal">
+      <div class="about-frame">
+        <div class="about-frame-inner">
+          <span class="about-initials">JN</span>
+          <div class="about-years">
+            <div class="about-stat">
+              <span class="about-stat-num">10+</span>
+              <span class="about-stat-label">let praxe</span>
+            </div>
+            <div class="about-stat">
+              <span class="about-stat-num">500+</span>
+              <span class="about-stat-label">spokojených klientů</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="about-badge">
+        <span class="about-badge-num">★★★</span>
+        <span class="about-badge-text">Top<br>kadeřnice</span>
+      </div>
+    </div>
+    <div class="about-text">
+      <span class="section-label reveal">O mně</span>
+      <h2 class="section-title reveal reveal-delay-1">Jana <em>Nováková</em></h2>
+      <div class="section-divider reveal reveal-delay-2"></div>
+      <div class="reveal reveal-delay-3">
+        <p>Jmenuji se Jana Nováková a kadeřnictví je mou vášní již více než 10 let. Specializuji se na moderní i klasické střihy, barvení a individuální přístup ke každému klientovi.</p>
+        <p>Mým cílem je, aby každý zákazník odcházel spokojený a cítil se skvěle. Každý návštěvník je pro mě jedinečný – společně najdeme to, co vám bude nejlépe sedět.</p>
+      </div>
+      <p class="about-signature reveal reveal-delay-4">Jana Nováková</p>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="services-header">
+    <span class="section-label reveal">Naše služby</span>
+    <h2 class="section-title reveal reveal-delay-1">Co pro vás <em>uděláme</em></h2>
+    <div class="section-divider reveal reveal-delay-2"></div>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal reveal-delay-1">
+      <div class="service-icon">💇‍♀️</div>
+      <p class="service-name">Dámské střihy</p>
+      <p class="service-desc">Moderní i klasické střihy přizpůsobené vašemu stylu a tvaru obličeje.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-2">
+      <div class="service-icon">💇‍♂️</div>
+      <p class="service-name">Pánské střihy</p>
+      <p class="service-desc">Precizní střihy pro pány – od klasiky po moderní trendy.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-3">
+      <div class="service-icon">👦</div>
+      <p class="service-name">Dětské střihy</p>
+      <p class="service-desc">Příjemné prostředí a trpělivý přístup pro ty nejmenší zákazníky.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-4">
+      <div class="service-icon">🎨</div>
+      <p class="service-name">Barvení vlasů</p>
+      <p class="service-desc">Profesionální barvení s použitím kvalitních přípravků šetrných k vlasům.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-5">
+      <div class="service-icon">✨</div>
+      <p class="service-name">Melír</p>
+      <p class="service-desc">Přirozené i kontrastní melíry pro dokonalý výsledek plný hloubky.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-6">
+      <div class="service-icon">💨</div>
+      <p class="service-name">Styling a foukaná</p>
+      <p class="service-desc">Profesionální finální úprava pro každodenní svěžest i výjimečné chvíle.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-1">
+      <div class="service-icon">👑</div>
+      <p class="service-name">Společenské účesy</p>
+      <p class="service-desc">Slavnostní účesy pro svatby, maturitní plesy a jiné výjimečné příležitosti.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="pricing-header">
+    <span class="section-label reveal">Ceník</span>
+    <h2 class="section-title reveal reveal-delay-1">Přehledné <em>ceny</em></h2>
+    <div class="section-divider reveal reveal-delay-2"></div>
+  </div>
+  <div class="pricing-grid">
+    <div class="pricing-card reveal reveal-delay-1">
+      <div class="pricing-card-header">
+        <span class="pricing-card-icon">💇‍♀️</span>
+        <span class="pricing-card-title">Dámské</span>
+      </div>
+      <div class="pricing-items">
+        <div class="pricing-item">
+          <span class="pricing-item-name">Střih + foukaná</span>
+          <span class="pricing-item-price">500 Kč</span>
+        </div>
+        <div class="pricing-item">
+          <span class="pricing-item-name">Barvení vlasů</span>
+          <span class="pricing-item-price">od 900 Kč</span>
+        </div>
+        <div class="pricing-item">
+          <span class="pricing-item-name">Melír</span>
+          <span class="pricing-item-price">od 1 200 Kč</span>
+        </div>
+      </div>
+    </div>
+    <div class="pricing-card reveal reveal-delay-2">
+      <div class="pricing-card-header">
+        <span class="pricing-card-icon">💇‍♂️</span>
+        <span class="pricing-card-title">Pánské</span>
+      </div>
+      <div class="pricing-items">
+        <div class="pricing-item">
+          <span class="pricing-item-name">Střih</span>
+          <span class="pricing-item-price">250 Kč</span>
+        </div>
+        <div class="pricing-item">
+          <span class="pricing-item-name">Střih + mytí</span>
+          <span class="pricing-item-price">300 Kč</span>
+        </div>
+      </div>
+    </div>
+    <div class="pricing-card reveal reveal-delay-3">
+      <div class="pricing-card-header">
+        <span class="pricing-card-icon">👦</span>
+        <span class="pricing-card-title">Děti</span>
+      </div>
+      <div class="pricing-items">
+        <div class="pricing-item">
+          <span class="pricing-item-name">Střih</span>
+          <span class="pricing-item-price">180 Kč</span>
+        </div>
+      </div>
+    </div>
+    <div class="pricing-card reveal reveal-delay-4">
+      <div class="pricing-card-header">
+        <span class="pricing-card-icon">👑</span>
+        <span class="pricing-card-title">Ostatní</span>
+      </div>
+      <div class="pricing-items">
+        <div class="pricing-item">
+          <span class="pricing-item-name">Společenský účes</span>
+          <span class="pricing-item-price">od 600 Kč</span>
+        </div>
+        <div class="pricing-item">
+          <span class="pricing-item-name">Regenerační péče</span>
+          <span class="pricing-item-price">od 300 Kč</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATION -->
+<section id="location">
+  <div class="location-grid">
+    <div>
+      <span class="section-label reveal">Kde nás najdete</span>
+      <h2 class="section-title reveal reveal-delay-1">Přijďte <em>za námi</em></h2>
+      <div class="section-divider reveal reveal-delay-2"></div>
+      <div class="reveal reveal-delay-3">
+        <p class="location-info">Najdete nás v Mladé Boleslavi u městského stadionu. Snadno dostupné místo s možností parkování v okolí.</p>
+      </div>
+      <div class="location-details reveal reveal-delay-4">
+        <div class="location-detail">
+          <span class="location-detail-icon">📍</span>
+          <div class="location-detail-text">
+            <span class="location-detail-label">Adresa</span>
+            U Stadionu 123, 293 01 Mladá Boleslav
+          </div>
+        </div>
+        <div class="location-detail">
+          <span class="location-detail-icon">🕐</span>
+          <div class="location-detail-text">
+            <span class="location-detail-label">Otevírací doba</span>
+            Po–Pá: 9:00 – 18:00 &nbsp;|&nbsp; So: 9:00 – 13:00
+          </div>
+        </div>
+        <div class="location-detail">
+          <span class="location-detail-icon">📞</span>
+          <div class="location-detail-text">
+            <span class="location-detail-label">Telefon</span>
+            +420 123 456 789
+          </div>
+        </div>
+      </div>
+      <button class="btn-primary reveal reveal-delay-5" onclick="openModal()">Objednat se online</button>
+    </div>
+    <div class="map-container reveal reveal-delay-2">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2554.4!2d14.9124!3d50.4131!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470ead3a6e8c0001%3A0x400af0f66153ede0!2sML%C3%A1d%C3%A1%20Boleslav!5e0!3m2!1scs!2scz!4v1700000000000!5m2!1scs!2scz"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="Mapa – Kadeřnictví u Stadionu, Mladá Boleslav"
+      ></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <span class="section-label reveal">Kontakt</span>
+    <h2 class="section-title reveal reveal-delay-1">Ozvěte se <em>nám</em></h2>
+    <div class="section-divider reveal reveal-delay-2"></div>
+    <p class="reveal reveal-delay-3">Objednejte se telefonicky, e-mailem nebo přes náš online formulář. Těšíme se na vás!</p>
+    <div class="contact-info reveal reveal-delay-4">
+      <a href="tel:+420123456789" class="contact-item">
+        <span class="contact-item-icon">📞</span>
+        +420 123 456 789
+      </a>
+      <a href="mailto:info@kadernictviustadionu.cz" class="contact-item">
+        <span class="contact-item-icon">✉️</span>
+        info@kadernictviustadionu.cz
+      </a>
+    </div>
+    <div class="reveal reveal-delay-5">
+      <button class="btn-primary" onclick="openModal()">Objednat se online</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">Kadeřnictví <span>u Stadionu</span></div>
+    <ul class="footer-links">
+      <li><a href="#about">O mně</a></li>
+      <li><a href="#services">Služby</a></li>
+      <li><a href="#pricing">Ceník</a></li>
+      <li><a href="#contact">Kontakt</a></li>
+    </ul>
+    <p class="footer-copy">© 2025 Kadeřnictví u Stadionu · Mladá Boleslav</p>
+  </div>
+</footer>
+
+<!-- BOOKING MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <h2 class="modal-title">Objednávka</h2>
+    <p class="modal-subtitle">Vyplňte formulář a ozveme se vám co nejdříve</p>
+    <div class="form-group">
+      <label>Jméno a příjmení</label>
+      <input type="text" id="formName" placeholder="Jana Nováková">
+    </div>
+    <div class="form-group">
+      <label>Telefon</label>
+      <input type="tel" id="formPhone" placeholder="+420 123 456 789">
+    </div>
+    <div class="form-group">
+      <label>Služba</label>
+      <select id="formService">
+        <option value="">— Vyberte službu —</option>
+        <option>Dámský střih + foukaná (500 Kč)</option>
+        <option>Dámské barvení vlasů (od 900 Kč)</option>
+        <option>Dámský melír (od 1 200 Kč)</option>
+        <option>Pánský střih (250 Kč)</option>
+        <option>Pánský střih + mytí (300 Kč)</option>
+        <option>Dětský střih (180 Kč)</option>
+        <option>Společenský účes (od 600 Kč)</option>
+        <option>Regenerační péče (od 300 Kč)</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Poznámka (volitelně)</label>
+      <textarea id="formNote" placeholder="Váš vzkaz nebo preferovaný termín..."></textarea>
+    </div>
+    <button class="btn-primary modal-submit" onclick="submitForm()">Odeslat objednávku</button>
+  </div>
+</div>
+
+<script>
+  // ─── NAV SCROLL ───
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // ─── HAMBURGER ───
+  let menuOpen = false;
+  function toggleMenu() {
+    menuOpen = !menuOpen;
+    document.getElementById('navLinks').classList.toggle('open', menuOpen);
+    const h1 = document.getElementById('h1');
+    const h2 = document.getElementById('h2');
+    const h3 = document.getElementById('h3');
+    if (menuOpen) {
+      h1.style.transform = 'rotate(45deg) translate(4px, 4px)';
+      h2.style.opacity = '0';
+      h3.style.transform = 'rotate(-45deg) translate(4px, -4px)';
+    } else {
+      h1.style.transform = ''; h2.style.opacity = ''; h3.style.transform = '';
+    }
+  }
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.addEventListener('click', () => {
+      if (menuOpen) toggleMenu();
+    });
+  });
+
+  // ─── SCROLL REVEAL ───
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+  // ─── MODAL ───
+  function openModal() {
+    document.getElementById('modalOverlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  function closeModalOutside(e) {
+    if (e.target === document.getElementById('modalOverlay')) closeModal();
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  function submitForm() {
+    const name = document.getElementById('formName').value.trim();
+    const phone = document.getElementById('formPhone').value.trim();
+    const service = document.getElementById('formService').value;
+    if (!name || !phone || !service) {
+      alert('Prosím vyplňte jméno, telefon a vyberte službu.');
+      return;
+    }
+    closeModal();
+    setTimeout(() => {
+      alert(`✅ Děkujeme, ${name}!\n\nVaše objednávka na „${service}" byla přijata.\nOzveme se vám na číslo ${phone} co nejdříve.\n\n— Kadeřnictví u Stadionu`);
+      document.getElementById('formName').value = '';
+      document.getElementById('formPhone').value = '';
+      document.getElementById('formService').value = '';
+      document.getElementById('formNote').value = '';
+    }, 300);
+  }
+</script>
+</body>
+</html>
